@@ -1,0 +1,15 @@
+.welcomeTitle{
+    font-family: 'Raleway', sans-serif;
+    color:#042b7c;
+}
+
+.welcomeText{
+    line-height: 2.2;
+
+}
+ 
+.startedBtn{
+    padding: 12px;
+    border-radius: 72px;
+    background-color: rgb(243, 186, 89);
+ }
