@@ -76,8 +76,10 @@ function Form() {
                     className='form-check-input mx-3' 
                     type="radio" name={question.surveyQuestion} 
                     value={option}
-                    onChange={handleOnChange}
-                     />
+                    onChange={(e)=>{
+                      handleOnChange(index,question.surveyQuestion,e)
+                      }}
+                      />
                       <label className="form-check-label" htmlFor={option.question}>
                         {option}
                       </label>
