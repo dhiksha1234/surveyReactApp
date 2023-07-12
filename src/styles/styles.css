@@ -38,3 +38,17 @@
     border-radius: 72px !important;
     outline: 1px solid #042b7c ;
 }
+
+.paginationBtn{
+    list-style: none;
+    /* display:flex;
+    justify-content:end; */
+}
+
+.nextBtn{
+    padding: 12px !important;
+    border-radius: 72px !important;
+    background-color: rgb(212, 130, 74) !important;
+    width: 7%;
+
+}
