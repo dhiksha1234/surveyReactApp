@@ -1,7 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Row';
 import { Link } from 'react-router-dom' ;
-import '../styles.css';
+import '../styles/styles.css';
 
 
 function WelcomePage(){
