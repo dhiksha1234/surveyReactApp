@@ -11,7 +11,6 @@ import surveyQuestions from '../data/questions.json'
   
 function Form() {
   const [ pageNumber, setPageNumber] = useState(1);
-  const [ selectedRadioBtn, setSelectedRadioBtn] = useState(0);
   const [ answeredQuestion, setAnsweredQuestion] = useState({});
   const [ firstIndex, setFirstIndex] = useState(0);
   const [ allAnsweredPerPage, setAllAnsweredPerPage] = useState(false);
@@ -20,8 +19,7 @@ function Form() {
   const totalPageCount = Math.ceil(surveyQuestions.length / perPage);
  
   const handleOnChange = (index,question,e) =>{
-     setSelectedRadioBtn(index);
-     setAnsweredQuestion({...answeredQuestion, 
+      setAnsweredQuestion({...answeredQuestion, 
       [e.target.name] : e.target.value})
     }
 
@@ -66,7 +64,6 @@ function Form() {
             {/* Navbar */}
             <Navbar className='d-flex justify-content-between navBar' data-bs-theme="dark">
               <Navbar.Brand >Page {pageNumber} of {totalPageCount}</Navbar.Brand>
-              <Navbar.Brand > First Index {firstIndex} Last Index {lastIndex}</Navbar.Brand>
               <Navbar.Brand > {Math.floor(Object.keys(answeredQuestion).length*6.7)}% completed</Navbar.Brand>
              </Navbar>
              {/* Mapping the surveyQuestions */}
