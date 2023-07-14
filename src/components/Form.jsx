@@ -19,22 +19,25 @@ function Form() {
   const [firstIndex, setFirstIndex] = useState(0);
   const [allAnsweredPerPage, setAllAnsweredPerPage] = useState(false);
   const [disable, isDisabled] = useState(true);
-  const [selectedIndex, setSelectedIndex] = useState();
   const perPage = 5;
   const totalPageCount = Math.ceil(surveyQuestions.length / perPage);
 
-  const handleOnChange = (index, question, e) => {
-    setSelectedIndex(index);
+  const handleOnChange = (index, value, e) => {
     setAnsweredQuestion({
       ...answeredQuestion,
       [e.target.name]: e.target.value,
     });
+    const date = surveyQuestions.find(
+      (obj) => obj.surveyQuestion === e.target.name
+    );
+    console.log((date.answeredOptions = e.target.value));
+    console.log(surveyQuestions);
     isDisabled(false);
   };
 
   const handleNextPage = () => {
-    setPageNumber((pageNumber) => pageNumber + 1);
-    setAnsweredQuestion({});
+    setPageNumber((pageNumber) => pageNumber + 1
+    );
   };
 
   const lastIndex = firstIndex + perPage;
@@ -43,6 +46,7 @@ function Form() {
     let select = document.getElementById("popup");
     select.classList.add("set-popup");
     document.getElementById("overLay").style.display = "block";
+    console.log(surveyQuestions);
   };
 
   const closePop = () => {
@@ -145,7 +149,7 @@ function Form() {
         </Navbar.Brand>
         <Navbar.Brand>
           {" "}
-          {Math.floor(Object.keys(answeredQuestion).length * 6.7)}% completed
+          {Math.floor(Object.keys(answeredQuestion).length * 20)}% completed
         </Navbar.Brand>
       </Navbar>
       {/* Mapping the surveyQuestions */}
@@ -162,29 +166,24 @@ function Form() {
                   {/* Mapping the options */}
                   {questionOptions.map((option, index, e) => {
                     return (
-                      <div className={"radioBtn"}>
+                      <div
+                        className={"radioBtn"}
+                        key={`${parentIndex}${index}`}
+                      >
                         <input
-                          className={`form-check-input mx-${
-                            selectedIndex === index
-                              ? "radioBtn-checked"
-                              : "radio-Btn"
-                          }`}
+                          className={"form-check-input"}
                           type="radio"
                           name={question.surveyQuestion}
-                          // value={option}
-                          id={option}
-                          onChange={(e) => {
+                          value={option}
+                          id={`${parentIndex}${index}`}
+                          onClick={(e) => {
                             handleOnChange(index, question.surveyQuestion, e);
                           }}
                         />
-                        {console.log(question.surveyQuestion)}
-                        {console.log(index)}
                         <label
-                          className="form-check-label"
-                          htmlFor={option}
-                          key={index}
+                          className="form-check-label label-radio-btn"
+                          htmlFor={`${parentIndex}${index}`}
                         >
-                          {console.log(option)}
                           {option}
                         </label>
                       </div>
