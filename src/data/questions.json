@@ -1,62 +1,46 @@
 [
-    {
-      "surveyQuestion":"I am confident that I will successfully complete this course",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"You are a fast learner",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"You are a interested in Maths",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"You are a interested in Science",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"You are a interested in Social",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"You are a logical thinker",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"You are a spiritual person",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you complete assignment within time",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you spend more time in mobile",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you need guidance from tutor",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Are you a social person",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you like Algebra",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you know Newton's second law",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you know the symbol of copper",
-      "type":"radioButton"
-    },
-    {
-      "surveyQuestion":"Do you know the symbol of gold",
-      "type":"radioButton"
-    }
-   ]
+  {
+    "surveyQuestion": "I am confident that I will successfully complete this course",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "You are a fast learner",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "You are a interested in Maths",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "You are a interested in Science",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "You are a interested in Social",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "Do you need guidance from tutor",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "Are you a social person",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "Do you like Algebra",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "Do you know Newton's second law",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "Do you know the symbol of copper",
+    "answeredOptions": ""
+  },
+  {
+    "surveyQuestion": "Do you know the symbol of gold",
+    "answeredOptions": ""
+  }
+]
