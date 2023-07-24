@@ -1,87 +1,102 @@
 import { Navbar, Image } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AlertModal from "./alertModal";
-import ReactPaginate from "react-paginate";
-import surveyQuestions from "../data/questions.json";
+import axios from 'axios';
 import { Link } from "react-router-dom";
-
-const questionOptions = [
-  "Strongly Disagree",
-  "Disagree",
-  "Neutral",
-  "Agree",
-  "Strongly Agree",
-];
+ 
 
 function Form() {
   const [pageNumber, setPageNumber] = useState(1);
   const [answeredQuestion, setAnsweredQuestion] = useState({});
-  const [firstIndex, setFirstIndex] = useState(0);
+  const [questionList, setQuestionList] = useState([]);
+  const [optionList, setOptionList] = useState([]);
   const [allAnsweredPerPage, setAllAnsweredPerPage] = useState(false);
+  const [postData, setPostData] = useState([]);
+
   const [disable, isDisabled] = useState(true);
   const perPage = 5;
-  const totalPageCount = Math.ceil(surveyQuestions.length / perPage);
+  const totalPageCount = Math.ceil(questionList.length / perPage);
 
-  const handleOnChange = (index, value, e) => {
+  useEffect(() => {
+     
+    axios.get(`http://localhost:8000/api/v1/question`)
+    .then(res => {
+      setQuestionList(res.data);
+    })
+
+    axios.get(`http://localhost:8000/api/v1/option`)
+    .then(res => {
+      setOptionList(res.data);
+    })
+
+    
+  }, []);
+ 
+  const handleOnChange = (index, value, e,questionId,optionId) => {
     setAnsweredQuestion({
       ...answeredQuestion,
       [e.target.name]: e.target.value,
     });
-    const date = surveyQuestions.find(
-      (obj) => obj.surveyQuestion === e.target.name
-    );
-    console.log((date.answeredOptions = e.target.value));
-    console.log(surveyQuestions);
+    console.log("surveyQuestion.questionId",questionId)
+    console.log("option",optionId)
+  
+
+    axios.get(`http://localhost:8000/api/v1/question/option/${questionId}/${optionId}`)
+    .then( res => {
+      const questionOptionID = res.data[0].Options[0].Question_Option.questionOptionId;
+      console.log("questionOptionID",questionOptionID)
+      setPostData((prev)=>({
+        ...prev,
+        [questionId]: questionOptionID
+      }))
+
+    })
     isDisabled(false);
-  };
+    
+   };
+   console.log(postData)
+ 
+   
+   const handleSubmitBtn = () => {
 
-  const handleNextPage = () => {
-    setPageNumber((pageNumber) => pageNumber + 1
-    );
-  };
+      const userId = 1;
 
-  const lastIndex = firstIndex + perPage;
+      const responsesArray = Object.values(postData).map((questionOptionId) => {
+         return {
+          userId,
+          questionOptionId,
+        };
+      });
+      console.log("array",responsesArray)
 
+      //post the response
+      axios.post("http://localhost:8000/api/v1/response", responsesArray)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      // display the response
+      axios.get(`http://localhost:8000/api/v1/response`)
+      .then(res => {
+        console.log(res.data);
+      })
+   }
+
+ 
   const openPopup = () => {
     let select = document.getElementById("popup");
     select.classList.add("set-popup");
     document.getElementById("overLay").style.display = "block";
-    console.log(surveyQuestions);
-  };
+   };
 
   const closePop = () => {
     let select = document.getElementById("popup");
     select.classList.remove("set-popup");
     document.getElementById("overLay").style.display = "none";
   };
-  const PreviousBtn = () => {
-    return (
-      <button
-        type="button"
-        className="btn mt-2 saveLaterBtn mb-2"
-        onClick={() => {
-          handlePreviousPage();
-        }}
-      >
-        {" "}
-        Previous
-      </button>
-    );
-  };
-  const NextBtn = () => {
-    return (
-      <button
-        type="button"
-        className="btn mt-2 startedBtn mb-2"
-        onClick={() => {
-          handleNextPage();
-        }}
-      >
-        {" "}
-        Next{" "}
-      </button>
-    );
-  };
+
   const SubmitBtn = () => {
     return (
       <>
@@ -91,7 +106,7 @@ function Form() {
           disabled={disable}
           onClick={() => {
             openPopup();
-          }}
+           }}
         >
           {" "}
           Complete{" "}
@@ -112,20 +127,13 @@ function Form() {
             Go back
           </button>
           <Link to="/summary">
-            <button className="complete-prof">Complete profile</button>
+            <button className="complete-prof" onClick={handleSubmitBtn}>Complete profile</button>
           </Link>
         </div>
       </>
     );
   };
-  const handlePreviousPage = () => {
-    setPageNumber(pageNumber - 1);
-  };
 
-  const changePage = ({ selected }) => {
-    const newFirstIndex = (selected * perPage) % surveyQuestions.length;
-    setFirstIndex(newFirstIndex);
-  };
 
   return (
     <>
@@ -154,17 +162,16 @@ function Form() {
       </Navbar>
       {/* Mapping the surveyQuestions */}
       <div className="question mt-5 mx-5">
-        {surveyQuestions
-          .slice(firstIndex, lastIndex)
-          .map((question, parentIndex) => {
+        {questionList
+          .map((surveyQuestion, parentIndex) => {
             return (
               <>
                 <div className="question-wrapper" key={parentIndex}>
                   <h3 className="textColor fw-bold mt-4">
-                    {question.surveyQuestion}
+                    {surveyQuestion.surveyQuestion}
                   </h3>
                   {/* Mapping the options */}
-                  {questionOptions.map((option, index, e) => {
+                  {optionList.map((option, index, e) => {
                     return (
                       <div
                         className={"radioBtn"}
@@ -173,18 +180,19 @@ function Form() {
                         <input
                           className={"form-check-input"}
                           type="radio"
-                          name={question.surveyQuestion}
+                          name={surveyQuestion.surveyQuestion}
                           value={option}
                           id={`${parentIndex}${index}`}
                           onClick={(e) => {
-                            handleOnChange(index, question.surveyQuestion, e);
+                            handleOnChange(index, surveyQuestion.surveyQuestion, e,surveyQuestion.questionId, option.optionId);
                           }}
                         />
                         <label
                           className="form-check-label label-radio-btn"
                           htmlFor={`${parentIndex}${index}`}
                         >
-                          {option}
+                          
+                          {option.surveyOptions}
                         </label>
                       </div>
                     );
@@ -201,25 +209,9 @@ function Form() {
         setAllAnsweredPerPage={setAllAnsweredPerPage}
       />
       <div className="pageFooter ">
-        {/* using react paginate */}
-        <ReactPaginate
-          previousLabel={pageNumber === 1 ? "" : <PreviousBtn />}
-          nextLabel={
-            totalPageCount === pageNumber ? <SubmitBtn /> : <NextBtn />
-          }
-          pageCount={totalPageCount}
-          onPageChange={changePage}
-          containerClassName={"paginationBtn"}
-          previousLinkClassName={"pre"}
-          nextLinkClassName={"nextLink"}
-          disabledClassName={"disable"}
-          activeClassName={"paginationActive"}
-        />
       </div>
-      <button type="button" className="btn mt-2 mx-5 saveLaterBtn mb-2 ">
-        {" "}
-        Save for later
-      </button>
+   
+      <SubmitBtn/>
       <div id="overLay" className="over-lay"></div>
     </>
   );

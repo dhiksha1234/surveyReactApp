@@ -6,3 +6,18 @@ Student Survey form in react app
 ![Screenshot from 2023-07-12 22-03-03](https://github.com/dhiksha1234/surveyReactApp/assets/114207100/ed38a793-4ca4-4e20-9331-d3fd3cac7f50)
 ![Screenshot from 2023-07-12 22-03-15](https://github.com/dhiksha1234/surveyReactApp/assets/114207100/e059a9e3-800d-4707-afb0-0f733ec705f3)
 ![Screenshot from 2023-07-12 22-03-50](https://github.com/dhiksha1234/surveyReactApp/assets/114207100/e335cee7-fd57-4783-923f-14da7f3ed6d3)
+
+The purpose of this react application is to get the feedback from the students. 
+
+INSTALLATION
+
+clone the project - https://github.com/dhiksha1234/surveyReactApp.git 
+and give yarn install to install all the dependencies
+
+PORT 
+
+runs in the port - 3000
+
+FINAL STEP
+
+give yarn start for the application to start
