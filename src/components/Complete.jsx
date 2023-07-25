@@ -1,25 +1,49 @@
 import Row from "react-bootstrap/Row";
 import axios from 'axios';
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
 
 const Complete = () => {
+
+  const [ response, setResponse]= useState([]);
+
+    useEffect(() => {
+      
+      axios.get(`http://localhost:8000/api/v1/response`)
+      .then(res => {
+        console.log(res.data);
+        setResponse(res.data)
+      })
+    }, [response]);
+
+   
   return (
     <>
       <Row>
         <div>
           <img
             src="./group_study.jpg"
-            alt=""
-            width="100%"
-            height="400"
-            style={{ objectFit: "cover" }}
+            alt="university_img"
+            className="studyImage"
           />
         </div>
       </Row>
       <div className="container-fluid">
-        <div style={{paddingTop:"30px"}}>
-          <h1>Profile summary</h1>
+        <div className="pt-3">
+          <h1>Results</h1>
+           {response.map((response) => {
+            const questionOption = response.Question_Option;
+            const surveyQuestion = questionOption.Question.surveyQuestion;
+            const surveyOption = questionOption.Option.surveyOptions;
+
+            return (
+              <> 
+                <center>
+                <p>Question - {surveyQuestion} </p>        
+                <p>Option - {surveyOption}</p>
+                </center>
+              </>
+            )
+          })}
           <p>Congratulations Test!</p>
           <p>
             ParagraphParagraphs are the group of sentences combined together,

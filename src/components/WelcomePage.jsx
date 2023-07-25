@@ -9,8 +9,7 @@ function WelcomePage(){
         <>
           <Row>
              <div>
-             <img src="./group_study.jpg"  alt="" width="100%"
-              height="400" style={{ objectFit:'cover'}}/>
+             <img src="./group_study.jpg"  alt="university_img" className="studyImage"/>
             </div>
           </Row>
           <Row mt='4'>

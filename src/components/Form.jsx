@@ -1,19 +1,15 @@
 import { Navbar, Image } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import AlertModal from "./alertModal";
 import axios from 'axios';
 import { Link } from "react-router-dom";
  
 
 function Form() {
-  const [pageNumber, setPageNumber] = useState(1);
-  const [answeredQuestion, setAnsweredQuestion] = useState({});
+
   const [questionList, setQuestionList] = useState([]);
   const [optionList, setOptionList] = useState([]);
-  const [allAnsweredPerPage, setAllAnsweredPerPage] = useState(false);
   const [postData, setPostData] = useState([]);
 
-  const [disable, isDisabled] = useState(true);
   const perPage = 5;
   const totalPageCount = Math.ceil(questionList.length / perPage);
 
@@ -32,33 +28,25 @@ function Form() {
     
   }, []);
  
-  const handleOnChange = (index, value, e,questionId,optionId) => {
-    setAnsweredQuestion({
-      ...answeredQuestion,
-      [e.target.name]: e.target.value,
-    });
-    console.log("surveyQuestion.questionId",questionId)
-    console.log("option",optionId)
-  
+  const handleOnChange = (questionId,optionId) => {
 
+
+    // to get the questionOption Id of a particular question and option
     axios.get(`http://localhost:8000/api/v1/question/option/${questionId}/${optionId}`)
     .then( res => {
       const questionOptionID = res.data[0].Options[0].Question_Option.questionOptionId;
-      console.log("questionOptionID",questionOptionID)
       setPostData((prev)=>({
         ...prev,
         [questionId]: questionOptionID
       }))
 
     })
-    isDisabled(false);
-    
-   };
-   console.log(postData)
- 
+  };
    
    const handleSubmitBtn = () => {
 
+    
+    // Only the userId that are already in the users table should be given
       const userId = 1;
 
       const responsesArray = Object.values(postData).map((questionOptionId) => {
@@ -76,12 +64,7 @@ function Form() {
       })
       .catch((error) => {
         console.error(error);
-      });
-      // display the response
-      axios.get(`http://localhost:8000/api/v1/response`)
-      .then(res => {
-        console.log(res.data);
-      })
+      }); 
    }
 
  
@@ -100,17 +83,18 @@ function Form() {
   const SubmitBtn = () => {
     return (
       <>
-        <button
-          type="button"
-          className="btn  mt-2 startedBtn mb-2"
-          disabled={disable}
-          onClick={() => {
-            openPopup();
-           }}
-        >
-          {" "}
-          Complete{" "}
-        </button>
+        <div className = 'd-flex justify-content-end'>
+          <button
+            type="button"
+            className="btn startedBtn mb-2 me-5"
+             disabled={Object.values(postData).length === 5? false : true}
+             onClick={() => {
+               openPopup();
+              }}
+          >
+            Complete
+          </button>
+        </div>
         <div className="popup" id="popup">
           <h4 className="nav-text">
             Are you sure you're happy with your answer?
@@ -141,10 +125,8 @@ function Form() {
       <div className="image-wrapper">
         <Image
           src="./group_study.jpg"
-          className=""
-          width="100%"
-          height="400"
-          style={{ objectFit: "cover" }}
+          alt="university_img"
+          className="studyImage"
         />
       </div>
       {/* Navbar */}
@@ -153,11 +135,11 @@ function Form() {
         data-bs-theme="dark"
       >
         <Navbar.Brand>
-          Page {pageNumber} of {totalPageCount}
+          Page 1 of {totalPageCount}
         </Navbar.Brand>
         <Navbar.Brand>
           {" "}
-          {Math.floor(Object.keys(answeredQuestion).length * 20)}% completed
+          {Math.floor(Object.keys(postData).length * 20)}% completed
         </Navbar.Brand>
       </Navbar>
       {/* Mapping the surveyQuestions */}
@@ -183,8 +165,8 @@ function Form() {
                           name={surveyQuestion.surveyQuestion}
                           value={option}
                           id={`${parentIndex}${index}`}
-                          onClick={(e) => {
-                            handleOnChange(index, surveyQuestion.surveyQuestion, e,surveyQuestion.questionId, option.optionId);
+                          onClick={() => {
+                            handleOnChange(surveyQuestion.questionId, option.optionId);
                           }}
                         />
                         <label
@@ -203,11 +185,7 @@ function Form() {
           })}
       </div>
       <hr />
-      {/* Alert modal when all questions are not filled */}
-      <AlertModal
-        allAnsweredPerPage={allAnsweredPerPage}
-        setAllAnsweredPerPage={setAllAnsweredPerPage}
-      />
+ 
       <div className="pageFooter ">
       </div>
    
