@@ -29,16 +29,20 @@ function Form() {
   }, []);
  
   const handleOnChange = (questionId,optionId) => {
+    console.log("questionId",questionId)
+    console.log("optionId",optionId)
 
 
     // to get the questionOption Id of a particular question and option
     axios.get(`http://localhost:8000/api/v1/question/option/${questionId}/${optionId}`)
     .then( res => {
-      const questionOptionID = res.data[0].Options[0].Question_Option.questionOptionId;
+      const questionOptionID = res.data.questionOptionId;
       setPostData((prev)=>({
         ...prev,
         [questionId]: questionOptionID
       }))
+
+      console.log("questionOptionID",questionOptionID)
 
     })
   };
