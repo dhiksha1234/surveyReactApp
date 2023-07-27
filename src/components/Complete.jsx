@@ -10,8 +10,7 @@ const Complete = () => {
       
       axios.get(`http://localhost:8000/api/v1/response`)
       .then(res => {
-        console.log(res.data);
-        setResponse(res.data)
+         setResponse(res.data)
       })
     }, [response]);
 

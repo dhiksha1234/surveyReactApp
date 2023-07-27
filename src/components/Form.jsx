@@ -6,61 +6,39 @@ import { Link } from "react-router-dom";
 
 function Form() {
 
-  const [questionList, setQuestionList] = useState([]);
-  const [optionList, setOptionList] = useState([]);
+  const [formList, setFormList] = useState([]);
   const [postData, setPostData] = useState([]);
 
   const perPage = 5;
-  const totalPageCount = Math.ceil(questionList.length / perPage);
+  const totalPageCount = Math.ceil(formList.length / perPage);
 
   useEffect(() => {
      
-    axios.get(`http://localhost:8000/api/v1/question`)
+    axios.get(`http://localhost:8000/api/v1/form`)
     .then(res => {
-      setQuestionList(res.data);
-    })
-
-    axios.get(`http://localhost:8000/api/v1/option`)
-    .then(res => {
-      setOptionList(res.data);
-    })
-
-    
+      setFormList(res.data);
+    })   
   }, []);
  
   const handleOnChange = (questionId,optionId) => {
-    console.log("questionId",questionId)
-    console.log("optionId",optionId)
 
-
-    // to get the questionOption Id of a particular question and option
-    axios.get(`http://localhost:8000/api/v1/question/option/${questionId}/${optionId}`)
-    .then( res => {
-      const questionOptionID = res.data.questionOptionId;
-      setPostData((prev)=>({
+       setPostData((prev)=>({
         ...prev,
-        [questionId]: questionOptionID
+        [questionId]: optionId
       }))
-
-      console.log("questionOptionID",questionOptionID)
-
-    })
   };
    
-   const handleSubmitBtn = () => {
-
-    
+  const handleSubmitBtn = () => {
+  
     // Only the userId that are already in the users table should be given
       const userId = 1;
 
-      const responsesArray = Object.values(postData).map((questionOptionId) => {
-         return {
-          userId,
-          questionOptionId,
-        };
-      });
-      console.log("array",responsesArray)
-
+      const responsesArray = Object.entries(postData).map(([questionId , optionId]) => ({
+        questionId,
+        optionId,
+        userId
+       }));
+ 
       //post the response
       axios.post("http://localhost:8000/api/v1/response", responsesArray)
       .then((res) => {
@@ -142,13 +120,12 @@ function Form() {
           Page 1 of {totalPageCount}
         </Navbar.Brand>
         <Navbar.Brand>
-          {" "}
-          {Math.floor(Object.keys(postData).length * 20)}% completed
+           {Math.floor(Object.keys(postData).length * 20)}% completed
         </Navbar.Brand>
       </Navbar>
       {/* Mapping the surveyQuestions */}
       <div className="question mt-5 mx-5">
-        {questionList
+        {formList
           .map((surveyQuestion, parentIndex) => {
             return (
               <>
@@ -157,7 +134,7 @@ function Form() {
                     {surveyQuestion.surveyQuestion}
                   </h3>
                   {/* Mapping the options */}
-                  {optionList.map((option, index, e) => {
+                  {surveyQuestion.Options.map((option, index, e) => {
                     return (
                       <div
                         className={"radioBtn"}
