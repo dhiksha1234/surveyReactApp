@@ -8,6 +8,7 @@ function Form() {
 
   const [formList, setFormList] = useState([]);
   const [postData, setPostData] = useState([]);
+  const [userId, setUserId] = useState([]);
 
   const perPage = 5;
   const totalPageCount = Math.ceil(formList.length / perPage);
@@ -18,29 +19,26 @@ function Form() {
     .then(res => {
       setFormList(res.data);
     })   
-  }, []);
+    setUserId(Math.floor((Math.random() * 10)));
+   }, []);
  
   const handleOnChange = (questionId,optionId) => {
+
+    const questionData = formList?.find((f) => f.questionId === questionId);
+    questionData.selectedOption = optionId;
+    questionData.userId = userId;
+
 
        setPostData((prev)=>({
         ...prev,
         [questionId]: optionId
       }))
   };
-   
+    
   const handleSubmitBtn = () => {
   
-    // Only the userId that are already in the users table should be given
-      const userId = 1;
-
-      const responsesArray = Object.entries(postData).map(([questionId , optionId]) => ({
-        questionId,
-        optionId,
-        userId
-       }));
- 
       //post the response
-      axios.post("http://localhost:8000/api/v1/response", responsesArray)
+      axios.post("http://localhost:8000/api/v1/form", formList)
       .then((res) => {
         console.log(res.data);
       })
