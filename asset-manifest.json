@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/surveyReactApp/static/css/main.bfd4274d.css",
+    "main.js": "/surveyReactApp/static/js/main.c4209ce9.js",
+    "index.html": "/surveyReactApp/index.html",
+    "main.bfd4274d.css.map": "/surveyReactApp/static/css/main.bfd4274d.css.map",
+    "main.c4209ce9.js.map": "/surveyReactApp/static/js/main.c4209ce9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bfd4274d.css",
+    "static/js/main.c4209ce9.js"
+  ]
+}
